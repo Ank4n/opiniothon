@@ -376,9 +376,8 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
         // The Routing Request starts
     }
 
-
     @Override
-    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
+    public void onRoutingSuccess(List<Route> route, int shortestRouteIndex) {
         progressDialog.dismiss();
         CameraUpdate center = CameraUpdateFactory.newLatLng(start);
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
