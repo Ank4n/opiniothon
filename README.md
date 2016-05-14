@@ -1,4 +1,4 @@
-# Instead of building something thats already there, we are focusing on solving simple problems which we have faced from our own experiences and trying to reduce cost and time for last mile delivery businesses by optimizing deliveries.
+### We are building an Android app where we are focusing on solving simple problems which we have faced from our own experiences and trying to reduce cost and time for last mile delivery businesses by optimizing deliveries.
 
 - ## Problem 1:
 **Route Optimization for motor bikes:**
