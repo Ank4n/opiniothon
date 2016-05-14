@@ -15,6 +15,8 @@ public class DeliveryRequest {
     public static final String STATUS_DELIVERED = "Delivered";
     public static final String STATUS_CANCELLED = "Cancelled";
 
+    private String id;
+
     private LatLng startPoint;
 
     private LatLng endPoint;
@@ -90,5 +92,13 @@ public class DeliveryRequest {
 
     public void setDriverFootPrints(ArrayList<LatLng> driverFootPrints) {
         this.driverFootPrints = driverFootPrints;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
