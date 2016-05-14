@@ -201,7 +201,7 @@ public class DriverMapActivity extends AppCompatActivity implements RoutingListe
 
         } else {
 
-            LatLng via = new LatLng(12.92376915, 77.61471748);
+            //LatLng via = new LatLng(12.92376915, 77.61471748);
 
             progressDialog = ProgressDialog.show(this, "Please wait.", "Fetching showGoogleRecommendedRoute information.", true);
 
@@ -209,7 +209,7 @@ public class DriverMapActivity extends AppCompatActivity implements RoutingListe
                     .travelMode(AbstractRouting.TravelMode.DRIVING)
                     .withListener(this)
                     .alternativeRoutes(false)
-                    .waypoints(start, via, end)
+                    .waypoints(start, end)
                     .build();
 
             routing.execute();

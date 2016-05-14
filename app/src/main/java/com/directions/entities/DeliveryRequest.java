@@ -17,64 +17,69 @@ public class DeliveryRequest {
 
     private String id;
 
-    private LatLng startPoint;
+    private double startLat;
 
-    private LatLng endPoint;
+    private double startLon;
 
-    private ArrayList<LatLng> recommendedPathPoints;
+    private double destinationLat;
 
-    private ArrayList<LatLng> driverFootPrints;
+    private double destinationLon;
 
-    private DriverDetails driverDetails;
+    private ArrayList<LocationPoint> recommendedPathPoints;
 
-    private CustomerDetails customerDetails;
+    private ArrayList<LocationPoint> driverFootPrints;
+
+    private User driverDetails;
+
+    private User customerDetails;
 
     private String status = STATUS_WAITING;
 
-    public LatLng getStartPoint() {
-        return startPoint;
+    public double getStartLat() {
+        return startLat;
     }
 
-    public void setStartPoint(LatLng startPoint) {
-        this.startPoint = startPoint;
+    public void setStartLat(double startLat) {
+        this.startLat = startLat;
     }
 
-    public LatLng getEndPoint() {
-        return endPoint;
+    public double getStartLon() {
+        return startLon;
     }
 
-    public void setEndPoint(LatLng endPoint) {
-        this.endPoint = endPoint;
+    public void setStartLon(double startLon) {
+        this.startLon = startLon;
     }
 
-    public ArrayList<LatLng> getRecommendedPathPoints() {
-
-        if(recommendedPathPoints != null) {
-
-            recommendedPathPoints = new ArrayList<>();
-        }
-
-        return recommendedPathPoints;
+    public double getDestinationLat() {
+        return destinationLat;
     }
 
-    public void setRecommendedPathPoints(ArrayList<LatLng> recommendedPathPoints) {
-
-        this.recommendedPathPoints = recommendedPathPoints;
+    public void setDestinationLat(double destinationLat) {
+        this.destinationLat = destinationLat;
     }
 
-    public DriverDetails getDriverDetails() {
+    public double getDestinationLon() {
+        return destinationLon;
+    }
+
+    public void setDestinationLon(double destinationLon) {
+        this.destinationLon = destinationLon;
+    }
+
+    public User getDriverDetails() {
         return driverDetails;
     }
 
-    public void setDriverDetails(DriverDetails driverDetails) {
+    public void setDriverDetails(User driverDetails) {
         this.driverDetails = driverDetails;
     }
 
-    public CustomerDetails getCustomerDetails() {
+    public User getCustomerDetails() {
         return customerDetails;
     }
 
-    public void setCustomerDetails(CustomerDetails customerDetails) {
+    public void setCustomerDetails(User customerDetails) {
         this.customerDetails = customerDetails;
     }
 
@@ -87,12 +92,69 @@ public class DeliveryRequest {
     }
 
     public ArrayList<LatLng> getDriverFootPrints() {
-        return driverFootPrints;
+
+        if(driverFootPrints == null) {
+
+            driverFootPrints = new ArrayList<>();
+        }
+
+        ArrayList<LatLng> latLngs = new ArrayList<>();
+
+        for (LocationPoint locationPoint : driverFootPrints) {
+
+            latLngs.add(locationPoint.getLatLong());
+        }
+
+        return latLngs;
     }
 
-    public void setDriverFootPrints(ArrayList<LatLng> driverFootPrints) {
-        this.driverFootPrints = driverFootPrints;
+    public void setDriverFootPrints(ArrayList<LatLng> latLngs) {
+
+        ArrayList<LocationPoint> locationPoints = new ArrayList<>();
+
+        for (LatLng latLng : latLngs) {
+
+            LocationPoint locationPoint = new LocationPoint();
+            locationPoint.setDeliveryId(id);
+            locationPoint.setLatLong(latLng);
+            locationPoints.add(locationPoint);
+        }
+
+        this.driverFootPrints = locationPoints;
     }
+
+    public ArrayList<LatLng> getRecommendedPathPoints() {
+
+        if(recommendedPathPoints == null) {
+
+            recommendedPathPoints = new ArrayList<>();
+        }
+
+        ArrayList<LatLng> latLngs = new ArrayList<>();
+
+        for (LocationPoint locationPoint : recommendedPathPoints) {
+
+            latLngs.add(locationPoint.getLatLong());
+        }
+
+        return latLngs;
+    }
+
+    public void setRecommendedPathPoints(ArrayList<LatLng> latLngs) {
+
+        ArrayList<LocationPoint> locationPoints = new ArrayList<>();
+
+        for (LatLng latLng : latLngs) {
+
+            LocationPoint locationPoint = new LocationPoint();
+            locationPoint.setDeliveryId(id);
+            locationPoint.setLatLong(latLng);
+            locationPoints.add(locationPoint);
+        }
+
+        this.recommendedPathPoints = locationPoints;
+    }
+
 
     public String getId() {
         return id;
@@ -100,5 +162,17 @@ public class DeliveryRequest {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setStartPoint(LatLng latLng) {
+
+        startLat = latLng.latitude;
+        startLon = latLng.longitude;
+    }
+
+    public void setEndPoint(LatLng latLng) {
+
+        destinationLat = latLng.latitude;
+        destinationLon = latLng.longitude;
     }
 }
