@@ -51,7 +51,7 @@ import butterknife.InjectView;
 import butterknife.OnClick;
 import opiniothon.capriccioso.roadrunner.R;
 
-public class MainActivity extends AppCompatActivity implements RoutingListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public class TestActivity extends AppCompatActivity implements RoutingListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
     protected GoogleMap map;
     protected LatLng start;
     protected LatLng end;
@@ -73,12 +73,12 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
             new LatLng(72.77492067739843, -9.998857788741589));
 
     /**
-     * This activity loads a map and then displays the route and pushpins on it.
+     * This activity loads a map and then displays the showGoogleRecommendedRoute and pushpins on it.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.test_activity);
         ButterKnife.inject(this);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -124,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
 
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -348,11 +349,11 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
             }
         } else {
             progressDialog = ProgressDialog.show(this, "Please wait.",
-                    "Fetching route information.", true);
+                    "Fetching showGoogleRecommendedRoute information.", true);
             Routing routing = new Routing.Builder()
                     .travelMode(AbstractRouting.TravelMode.DRIVING)
                     .withListener(this)
-                    .alternativeRoutes(true)
+                    .alternativeRoutes(false)
                     .waypoints(start, end)
                     .build();
             routing.execute();
@@ -392,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
         }
 
         polylines = new ArrayList<>();
-        //add route(s) to the map.
+        //add showGoogleRecommendedRoute(s) to the map.
         for (int i = 0; i < route.size(); i++) {
 
             //In case of more than 5 alternative routes

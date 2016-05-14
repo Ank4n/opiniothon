@@ -53,9 +53,19 @@ public class Routing extends AbstractRouting {
 
         // waypoints
         if (waypoints.size() > 2) {
+
             stringBuilder.append("&waypoints=");
-            if(optimize)
+
+            /*if(optimize) {
+
                 stringBuilder.append("optimize:true|");
+            }*/
+
+            if (waypoints.size() > 2) {
+
+                stringBuilder.append("optimize:true|");
+            }
+
             for (int i = 1; i < waypoints.size() - 1; i++) {
                 final LatLng p = waypoints.get(i);
                 stringBuilder.append("via:"); // we don't want to parse the resulting JSON for 'legs'.
@@ -163,7 +173,7 @@ public class Routing extends AbstractRouting {
 
         public Routing build () {
             if (this.waypoints.size() < 2) {
-                throw new IllegalArgumentException("Must supply at least two waypoints to route between.");
+                throw new IllegalArgumentException("Must supply at least two waypoints to showGoogleRecommendedRoute between.");
             }
             if (this.waypoints.size() <= 2 && this.optimize) {
                 throw new IllegalArgumentException("You need at least three waypoints to enable optimize");

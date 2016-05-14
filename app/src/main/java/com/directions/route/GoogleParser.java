@@ -42,6 +42,9 @@ public class GoogleParser extends XMLParser implements Parser {
 
         // turn the stream into a string
         final String result = convertStreamToString(this.getInputStream());
+
+        Log.d("RoadRunner", "RoadRunner : Response From Google API : " + result);
+
         if (result == null) {
             throw new RouteException("Result is null");
         }
@@ -49,7 +52,7 @@ public class GoogleParser extends XMLParser implements Parser {
         try {
             //Tranform the string into a json object
             final JSONObject json = new JSONObject(result);
-            //Get the route object
+            //Get the showGoogleRecommendedRoute object
 
             if(!json.getString("status").equals(OK)){
                 throw new RouteException(json);
@@ -68,7 +71,8 @@ public class GoogleParser extends XMLParser implements Parser {
                 final JSONObject jsonNortheast = jsonBounds.getJSONObject("northeast");
                 final JSONObject jsonSouthwest = jsonBounds.getJSONObject("southwest");
 
-                route.setLatLgnBounds(new LatLng(jsonNortheast.getDouble("lat"), jsonNortheast.getDouble("lng")), new LatLng(jsonSouthwest.getDouble("lat"), jsonSouthwest.getDouble("lng")));
+                route.setLatLgnBounds(new LatLng(jsonNortheast.getDouble("lat"), jsonNortheast.getDouble("lng")),
+                        new LatLng(jsonSouthwest.getDouble("lat"), jsonSouthwest.getDouble("lng")));
 
                 //Get the leg, only one leg as we don't support waypoints
                 final JSONObject leg = jsonRoute.getJSONArray("legs").getJSONObject(0);
@@ -76,7 +80,7 @@ public class GoogleParser extends XMLParser implements Parser {
                 final JSONArray steps = leg.getJSONArray("steps");
                 //Number of steps for use in for loop
                 final int numSteps = steps.length();
-                //Set the name of this route using the start & end addresses
+                //Set the name of this showGoogleRecommendedRoute using the start & end addresses
                 route.setName(leg.getString("start_address") + " to " + leg.getString("end_address"));
                 //Get google's copyright notice (tos requirement)
                 route.setCopyright(jsonRoute.getString("copyrights"));
@@ -86,7 +90,7 @@ public class GoogleParser extends XMLParser implements Parser {
                 route.setDistanceText(leg.getJSONObject(DISTANCE).getString("text"));
                 route.setDistanceValue(leg.getJSONObject(DISTANCE).getInt(VALUE));
                 route.setEndAddressText(leg.getString("end_address"));
-                //Get the total length of the route.
+                //Get the total length of the showGoogleRecommendedRoute.
                 route.setLength(leg.getJSONObject(DISTANCE).getInt(VALUE));
                 //Get any warnings provided (tos requirement)
                 if (!jsonRoute.getJSONArray("warnings").isNull(0)) {
@@ -94,7 +98,7 @@ public class GoogleParser extends XMLParser implements Parser {
                 }
 
                 /* Loop through the steps, creating a segment for each one and
-                 * decoding any polylines found as we go to add to the route object's
+                 * decoding any polylines found as we go to add to the showGoogleRecommendedRoute object's
                  * map array. Using an explicit for loop because it is faster!
                  */
                 for (int y = 0; y < numSteps; y++) {
@@ -116,9 +120,9 @@ public class GoogleParser extends XMLParser implements Parser {
                     if(step.has("maneuver"))
                         segment.setManeuver(step.getString("maneuver"));
                     
-                    //Retrieve & decode this segment's polyline and add it to the route.
+                    //Retrieve & decode this segment's polyline and add it to the showGoogleRecommendedRoute.
                     route.addPoints(decodePolyLine(step.getJSONObject("polyline").getString("points")));
-                    //Push a copy of the segment to the route
+                    //Push a copy of the segment to the showGoogleRecommendedRoute
                     route.addSegment(segment.copy());
                 }
 

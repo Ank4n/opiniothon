@@ -2,7 +2,7 @@ package com.directions.route;
 
 /**
  * Async Task to access the Google Direction API and return the routing data
- * which is then parsed and converting to a route overlay using some classes created by Hesham Saeed.
+ * which is then parsed and converting to a showGoogleRecommendedRoute overlay using some classes created by Hesham Saeed.
  * @author Joel Dean
  * @author Furkan Tektas
  * Requires an instance of the map activity and the application's current context for the progress dialog.
@@ -140,7 +140,7 @@ public abstract class AbstractRouting extends AsyncTask<Void, Void, List<Route>>
                 PolylineOptions mOptions = new PolylineOptions();
                 Route route = result.get(i);
 
-                //Find the shortest route index
+                //Find the shortest showGoogleRecommendedRoute index
                 if (route.getLength() < minDistance) {
                     shortestRouteIndex = i;
                     minDistance = route.getLength();
