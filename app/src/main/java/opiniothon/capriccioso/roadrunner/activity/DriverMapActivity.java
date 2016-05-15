@@ -111,12 +111,6 @@ public class DriverMapActivity extends AppCompatActivity {
             }
         });
 
-        CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(12.94717095, 77.62842357));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
-
-        map.moveCamera(center);
-        map.animateCamera(zoom);
-
         LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -198,6 +192,18 @@ public class DriverMapActivity extends AppCompatActivity {
 
             @Override
             public void onRequestArrived(final DeliveryRequest deliveryRequest) {
+
+                CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(deliveryRequest.getStartLat(), deliveryRequest.getDestinationLon()));
+                CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
+
+                map.moveCamera(center);
+                map.animateCamera(zoom);
+
+                /*CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(deliveryRequest.getStartLat(), deliveryRequest.getDestinationLon()))
+                        .zoom(12)
+                        .build();
+                map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));*/
 
                 showGoogleRecommendedRoute(deliveryRequest);
 
@@ -408,7 +414,7 @@ public class DriverMapActivity extends AppCompatActivity {
                     Polyline polyline = map.addPolyline(polyOptions);
                     polyLines.add(polyline);
 
-                    Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
                 }
 
 

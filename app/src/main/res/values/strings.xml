@@ -9,7 +9,7 @@
     <string name="isNetwork">Please check internet connection.</string>
     <string name="start_navigate">Start navigating</string>
     <string name="new_pickup">You have a new pick up</string>
-    <string name="driver_boy">RoadRunner Delivery</string>
+    <string name="driver_boy">RoadRunner</string>
     <string name="location">Location</string>
     <string name="company">Enter company name</string>
     <string name="flat_no">Flat No. / House No.</string>
