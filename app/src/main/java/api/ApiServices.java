@@ -1,9 +1,8 @@
-package opiniothon.capriccioso.roadrunner.activity.api;
+package api;
 
 import com.directions.entities.User;
 
-import opiniothon.capriccioso.roadrunner.activity.modal.LoginBody;
-import opiniothon.capriccioso.roadrunner.activity.modal.LoginResponse;
+import modal.LoginBody;
 import retrofit.Call;
 import retrofit.http.Body;
 import retrofit.http.POST;

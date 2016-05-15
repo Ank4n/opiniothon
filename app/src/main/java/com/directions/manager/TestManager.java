@@ -71,8 +71,8 @@ public class TestManager {
         LatLng footPrintPoint2 = new LatLng(12.91117854, 77.60652065);
         recommendedPoints.add(footPrintPoint2);
 
-        /*LatLng footPrintPoint3 = new LatLng(12.90442285, 77.60422468);
-        recommendedPoints.add(footPrintPoint3);*/
+        LatLng footPrintPoint3 = new LatLng(12.90442285, 77.60422468);
+        recommendedPoints.add(footPrintPoint3);
 
         deliveryRequest.setStartPoint(latLngDriver);
         deliveryRequest.setEndPoint(latLngCustomer);

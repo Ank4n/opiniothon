@@ -1,12 +1,12 @@
-package opiniothon.capriccioso.roadrunner.activity.Activities;
+package opiniothon.capriccioso.roadrunner.activity;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import opiniothon.capriccioso.roadrunner.R;
@@ -20,6 +20,7 @@ public class UserActivity extends AppCompatActivity {
     Button buttonOrder;
     AlertDialog.Builder liveTrackingAlert;
 
+    CheckBox chkLiveTracking;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,13 +32,13 @@ public class UserActivity extends AppCompatActivity {
         buttonOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAlertDialog();
-                //todo : hv to implement api;
+
+
             }
         });
     }
 
-    private void showAlertDialog() {
+    /*private void showAlertDialog() {
 
         liveTrackingAlert = new AlertDialog.Builder(
                 UserActivity.this);
@@ -68,7 +69,7 @@ public class UserActivity extends AppCompatActivity {
         // show it
         alertDialog.show();
 
-    }
+    }*/
 
     private void init() {
         location = (EditText) findViewById(R.id.location);
@@ -79,6 +80,7 @@ public class UserActivity extends AppCompatActivity {
 
         buttonOrder = (Button) findViewById(R.id.orderNowButton);
 
+        chkLiveTracking = (CheckBox) findViewById(R.id.chkLiveTracking);
 
     }
 

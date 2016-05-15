@@ -47,7 +47,7 @@
         </activity>
 
         <activity
-            android:name=".activity.Activities.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="@string/login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -57,11 +57,11 @@
         </activity>
 
         <activity
-            android:name=".activity.Activities.WaitingActivity"
+            android:name=".activity.WaitingActivity"
             android:label="@string/driver_boy"/>
 
         <activity
-            android:name=".activity.Activities.UserActivity"
+            android:name=".activity.UserActivity"
             android:label="@string/user"/>
 
     </application>

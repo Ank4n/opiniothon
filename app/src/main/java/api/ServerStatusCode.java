@@ -1,4 +1,4 @@
-package opiniothon.capriccioso.roadrunner.activity.api;
+package api;
 
 /**
  * Created by abdul on 15/05/16.

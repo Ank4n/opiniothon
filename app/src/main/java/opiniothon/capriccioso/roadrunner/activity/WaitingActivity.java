@@ -1,28 +1,20 @@
-package opiniothon.capriccioso.roadrunner.activity.Activities;
+package opiniothon.capriccioso.roadrunner.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnticipateOvershootInterpolator;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.os.Handler;
 
 import com.bumptech.glide.Glide;
 import com.zl.reik.dilatingdotsprogressbar.DilatingDotsProgressBar;
 
 import opiniothon.capriccioso.roadrunner.R;
-import opiniothon.capriccioso.roadrunner.activity.DriverMapActivity;
-import opiniothon.capriccioso.roadrunner.activity.MapsActivity;
-import opiniothon.capriccioso.roadrunner.activity.Util;
-import opiniothon.capriccioso.roadrunner.activity.Utils.CircleTransform;
+import utils.CircleTransform;
 
 /**
  * Created by abdul on 14/05/16.
@@ -58,14 +50,14 @@ public class WaitingActivity extends AppCompatActivity {
         mDilatingDotsProgressBar = (DilatingDotsProgressBar) findViewById(R.id.progress);
         mDilatingDotsProgressBar.showNow();
 
-        Glide.with(this).load(R.drawable.images).transform(new CircleTransform(this)).into(imageLoad);//to set default image
+        Glide.with(this).load(R.drawable.place_holder).transform(new CircleTransform(this)).into(imageLoad);//to set default image
 
 //        Util.loadImage(this, imageLoad, url);//loading from url;
 
         buttonNavigate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(WaitingActivity.this, UserActivity.class));
+                startActivity(new Intent(WaitingActivity.this, DriverMapActivity.class));
             }
         });
 

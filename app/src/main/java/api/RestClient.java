@@ -1,4 +1,4 @@
-package opiniothon.capriccioso.roadrunner.activity.api;
+package api;
 
 import com.squareup.okhttp.OkHttpClient;
 

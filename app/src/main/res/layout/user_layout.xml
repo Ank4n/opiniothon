@@ -1,121 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:gravity="bottom"
     android:layout_height="match_parent"
+    android:gravity="bottom"
     android:orientation="vertical">
-<TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="@color/black"
-    android:layout_marginTop="8dp"
-    android:layout_marginLeft="8dp"
-    android:textSize="16sp"
-    android:text="@string/delivery_address"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:text="@string/delivery_address"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
 
     <ScrollView
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="bottom"
-        android:layout_marginTop="8dp"
-        android:layout_height="match_parent">
+        android:layout_marginTop="8dp">
 
 
+        <LinearLayout
+            android:id="@+id/userInfoPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingLeft="6dp"
+            android:paddingRight="6dp">
 
-            <LinearLayout
-                android:id="@+id/userInfoPanel"
+
+            <EditText
+                android:id="@+id/location"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingLeft="6dp"
-                android:paddingRight="6dp">
+                android:layout_height="48dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_draw"
+                android:hint="@string/location"
+                android:padding="6dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color" />
 
+            <EditText
+                android:id="@+id/company"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_draw"
+                android:hint="@string/company"
+                android:padding="6dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color" />
 
+            <EditText
+                android:id="@+id/flat_no"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_draw"
+                android:hint="@string/flat_no"
+                android:padding="6dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color" />
 
-                <EditText
-                    android:id="@+id/location"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/edit_draw"
-                    android:hint="@string/location"
-                    android:textColorHint="@color/hint_color"
-                    android:padding="6dp"
-                    android:textColor="@color/black" />
+            <EditText
+                android:id="@+id/post_code"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="left"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/edit_draw"
+                android:hint="@string/postcode"
+                android:inputType="number"
+                android:padding="6dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color" />
 
-                <EditText
-                    android:id="@+id/company"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/edit_draw"
-                    android:hint="@string/company"
-                    android:textColorHint="@color/hint_color"
-                    android:padding="6dp"
-                    android:textColor="@color/black" />
+            <EditText
+                android:id="@+id/address"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_gravity="left"
+                android:layout_marginBottom="6dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/edit_draw"
+                android:hint="@string/address"
+                android:padding="6dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/hint_color" />
 
-                <EditText
-                    android:id="@+id/flat_no"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/edit_draw"
-                    android:hint="@string/flat_no"
-                    android:textColorHint="@color/hint_color"
-                    android:padding="6dp"
-                    android:textColor="@color/black" />
+            <CheckBox
+                android:id="@+id/chkLiveTracking"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="6dp"
+                android:layout_width="match_parent"
+                android:text="Track my availability before delivery"
+                />
 
-                <EditText
-                    android:id="@+id/post_code"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="4dp"
-                    android:inputType="number"
-                    android:background="@drawable/edit_draw"
-                    android:hint="@string/postcode"
-                    android:textColorHint="@color/hint_color"
-                    android:padding="6dp"
-                    android:textColor="@color/black" />
-
-                <EditText
-                    android:id="@+id/address"
-                    android:layout_width="match_parent"
-                    android:layout_height="96dp"
-                    android:layout_gravity="left"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginBottom="6dp"
-                    android:background="@drawable/edit_draw"
-                    android:hint="@string/address"
-                    android:textColorHint="@color/hint_color"
-                    android:padding="6dp"
-                    android:textColor="@color/black" />
-
-                <Button
-                    android:id="@+id/orderNowButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="56dp"
-                    android:layout_gravity="bottom"
-                    android:text="@string/order"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true" />
-            </LinearLayout>
+            <Button
+                android:id="@+id/orderNowButton"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="bottom"
+                android:text="@string/order" />
+        </LinearLayout>
 
     </ScrollView>
-
 
 
 </LinearLayout>

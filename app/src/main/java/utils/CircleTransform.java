@@ -1,4 +1,4 @@
-package opiniothon.capriccioso.roadrunner.activity.Utils;
+package utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

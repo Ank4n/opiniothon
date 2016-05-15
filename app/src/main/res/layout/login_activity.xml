@@ -33,6 +33,7 @@ it's contains email panel, password panel and login button -->
                 android:layout_marginTop="16dp"
                 android:textColorHint="@color/hint_color"
                 android:gravity="center_vertical"
+                android:text="9173824620"
                 android:hint="@string/enter_user_name"
                 android:textColor="@color/black" />
 
@@ -42,6 +43,8 @@ it's contains email panel, password panel and login button -->
                 android:layout_height="48dp"
                 android:layout_gravity="left"
                 android:padding="6dp"
+                android:text="111111"
+                android:inputType="numberPassword"
                 android:background="@drawable/edit_draw"
                 android:layout_marginBottom="24dp"
                 android:textColorHint="@color/hint_color"

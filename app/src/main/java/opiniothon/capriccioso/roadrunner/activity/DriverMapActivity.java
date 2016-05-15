@@ -112,7 +112,7 @@ public class DriverMapActivity extends AppCompatActivity {
         });
 
         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(12.94717095, 77.62842357));
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+        CameraUpdate zoom = CameraUpdateFactory.zoomTo(15);
 
         map.moveCamera(center);
         map.animateCamera(zoom);
@@ -185,9 +185,10 @@ public class DriverMapActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                runTestCase();
             }
         });
+
+        runTestCase();
     }
 
     private void startLookingForRequest() {

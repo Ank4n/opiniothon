@@ -30,12 +30,12 @@
                 android:layout_gravity="center"
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:src="@drawable/images"/>
+                android:src="@drawable/place_holder"/>
 
             <TextView
                 android:id="@+id/textSubTitle"
                 android:layout_width="match_parent"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"

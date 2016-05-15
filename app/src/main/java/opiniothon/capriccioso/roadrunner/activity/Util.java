@@ -6,7 +6,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.os.Handler;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -15,7 +14,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
 import opiniothon.capriccioso.roadrunner.R;
-import opiniothon.capriccioso.roadrunner.activity.Utils.CircleTransform;
+import utils.CircleTransform;
 
 /**
  * Created by abdul.
@@ -49,6 +48,7 @@ public final class Util {
      * load image using glider
      */
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public static void loadImage(final Activity context, final ImageView img, String url) {
         if (context == null || context.isDestroyed()) return;
 
@@ -57,13 +57,13 @@ public final class Util {
                         .listener(new RequestListener<String, GlideDrawable>() {
                             @Override
                             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                                Glide.with(context).load(R.drawable.images).transform(new CircleTransform(context)).into(img);
+                                Glide.with(context).load(R.drawable.place_holder).transform(new CircleTransform(context)).into(img);
                                 return false;
                             }
 
                             @Override
                             public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                                Glide.with(context).load(R.drawable.images).transform(new CircleTransform(context)).into(img);
+                                Glide.with(context).load(R.drawable.place_holder).transform(new CircleTransform(context)).into(img);
 
                                 return false;
                             }

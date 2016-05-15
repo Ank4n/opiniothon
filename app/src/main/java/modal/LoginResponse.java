@@ -1,4 +1,4 @@
-package opiniothon.capriccioso.roadrunner.activity.modal;
+package modal;
 
 /**
  * Created by abdul on 15/05/16.

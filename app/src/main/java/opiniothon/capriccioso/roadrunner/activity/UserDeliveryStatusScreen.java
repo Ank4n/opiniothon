@@ -1,4 +1,4 @@
-package opiniothon.capriccioso.roadrunner.activity.Activities;
+package opiniothon.capriccioso.roadrunner.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
