@@ -3,6 +3,7 @@ package com.directions.route;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,8 +38,8 @@ public class GoogleParser extends XMLParser implements Parser {
      * @return a Route object based on the JSON object by Haseem Saheed
      */
 
-    public final List<Route> parse() throws RouteException {
-        List<Route> routes = new ArrayList<>();
+    public final ArrayList<Route> parse() throws RouteException {
+        ArrayList<Route> routes = new ArrayList<>();
 
         // turn the stream into a string
         final String result = convertStreamToString(this.getInputStream());
@@ -97,6 +98,7 @@ public class GoogleParser extends XMLParser implements Parser {
                     route.setWarning(jsonRoute.getJSONArray("warnings").getString(0));
                 }
 
+                List<LatLng> polilines = new ArrayList<>();
                 /* Loop through the steps, creating a segment for each one and
                  * decoding any polylines found as we go to add to the showGoogleRecommendedRoute object's
                  * map array. Using an explicit for loop because it is faster!
@@ -121,10 +123,17 @@ public class GoogleParser extends XMLParser implements Parser {
                         segment.setManeuver(step.getString("maneuver"));
                     
                     //Retrieve & decode this segment's polyline and add it to the showGoogleRecommendedRoute.
-                    route.addPoints(decodePolyLine(step.getJSONObject("polyline").getString("points")));
+                    List<LatLng> polyLinePoints = decodePolyLine(step.getJSONObject("polyline").getString("points"));
+                    polilines.addAll(polyLinePoints);
+                    route.addPoints(polyLinePoints);
                     //Push a copy of the segment to the showGoogleRecommendedRoute
                     route.addSegment(segment.copy());
                 }
+
+                Gson gson = new Gson();
+                String s = gson.toJson(polilines);
+                Log.d("ROUTEDATA", s);
+
 
                 routes.add(route);
             }

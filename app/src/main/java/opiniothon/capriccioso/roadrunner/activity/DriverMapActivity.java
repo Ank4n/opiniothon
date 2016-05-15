@@ -8,20 +8,23 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.directions.entities.DeliveryRequest;
+import com.directions.manager.RequestManager;
+import com.directions.manager.TestManager;
 import com.directions.route.AbstractRouting;
 import com.directions.route.Route;
 import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -40,31 +43,30 @@ import java.util.List;
 
 import opiniothon.capriccioso.roadrunner.R;
 
-public class DriverMapActivity extends AppCompatActivity implements RoutingListener, GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
+public class DriverMapActivity extends AppCompatActivity {
+
+    public static  boolean launchCollectionMode = true;
 
     private static final String LOG_TAG = "DriverMapActivity";
 
-    private static final int COLOR_GOOGLE_PATH = Color.BLUE;
-    private static final int TRAVELLED_PATH = Color.GREEN;
-    private static final int SUGGESTED_PATH = Color.RED;
-
-    private static final int[] COLORS = new int[]{COLOR_GOOGLE_PATH, TRAVELLED_PATH, SUGGESTED_PATH};
+    //private static final int[] COLORS = new int[]{COLOR_GOOGLE_PATH, TRAVELLED_PATH, SUGGESTED_PATH};
 
     private GoogleMap map;
 
-    private LatLng start;
-    private LatLng end;
-
-    protected GoogleApiClient mGoogleApiClient;
-
-    private ProgressDialog progressDialog;
+    //private LatLng start;
+    //private LatLng end;
 
     private List<Polyline> polyLines;
 
+    private RequestManager requestManager;
 
     private static final LatLngBounds BOUNDS_BANGALURU = new LatLngBounds(
             new LatLng(77.40692138671875, 13.124954649619102),
             new LatLng(77.84912109375, 12.736800512460297));
+
+    private TextView tvAppCalculated;
+
+    private TextView tvGoogleSuggested;
 
     /**
      * This activity loads a map and then displays the showGoogleRecommendedRoute and pushpins on it.
@@ -82,13 +84,7 @@ public class DriverMapActivity extends AppCompatActivity implements RoutingListe
 
         polyLines = new ArrayList<>();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Places.GEO_DATA_API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
         MapsInitializer.initialize(this);
-        mGoogleApiClient.connect();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 
@@ -135,11 +131,11 @@ public class DriverMapActivity extends AppCompatActivity implements RoutingListe
             @Override
             public void onLocationChanged(Location location) {
 
-                CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
-                CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+                //CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+                //CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
 
-                map.moveCamera(center);
-                map.animateCamera(zoom);
+                //map.moveCamera(center);
+                //map.animateCamera(zoom);
             }
 
             @Override
@@ -162,148 +158,259 @@ public class DriverMapActivity extends AppCompatActivity implements RoutingListe
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 10, locationListener);
 
-        map.setMyLocationEnabled(true);
+        //map.setMyLocationEnabled(true);
 
         map.getUiSettings().setZoomControlsEnabled(true);
 
-        start = new LatLng(12.94717095, 77.62842357);
-        end = new LatLng(12.90276004 , 77.60727167);
+        //start = new LatLng(12.94717095, 77.62842357);
+        //end = new LatLng(12.90276004 , 77.60727167);
 
-        sendRequest();
+        tvGoogleSuggested = (TextView) findViewById(R.id.tvGoogleSuggested);
+        tvAppCalculated = (TextView) findViewById(R.id.tvAppCalculated);
+
+        if(launchCollectionMode) {
+
+            findViewById(R.id.llBottom).setVisibility(View.GONE);
+        }
+
+        startLookingForRequest();
+
+        runTestCase();
     }
 
+    private void startLookingForRequest() {
 
-    public void sendRequest() {
+        requestManager = RequestManager.getInstance(this);
+        requestManager.setOnRequestListener(new RequestManager.OnRequestListener() {
 
-        if (Util.Operations.isOnline(this)) {
+            @Override
+            public void onRequestArrived(final DeliveryRequest deliveryRequest) {
 
-            showGoogleRecommendedRoute();
+                showGoogleRecommendedRoute(deliveryRequest);
 
-        } else {
+                new Handler().postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+
+                        if(!launchCollectionMode) {
+
+                            showAppRecommendedRoute(deliveryRequest);
+
+                        } else {
+
+
+                            footPrintCollectionSimulation();
+                        }
+                    }
+
+                }, 1000);
+            }
+        });
+    }
+
+    private void footPrintCollectionSimulation() {
+
+
+        final ArrayList<LatLng> points = new ArrayList<LatLng>();
+
+        final ArrayList<Polyline> polylinesTemp = new ArrayList<>();
+
+        TestManager.getTestFootPrints(new TestManager.OnTestFootPrintListener() {
+
+            @Override
+            public void onNextFootPrint(final LatLng latLng) {
+
+                points.add(latLng);
+
+                final PolylineOptions polyOptions = new PolylineOptions();
+                int color = Color.argb(255, 0, 255, 0);
+                polyOptions.color(color);
+                polyOptions.width(18);
+                polyOptions.addAll(points);
+
+                for (Polyline poly : polylinesTemp) {
+                    poly.remove();
+                }
+
+                Polyline polyline = map.addPolyline(polyOptions);
+                polylinesTemp.add(polyline);
+
+                CameraUpdate center = CameraUpdateFactory.newLatLng(latLng);
+                CameraUpdate zoom = CameraUpdateFactory.zoomTo(14);
+
+                map.moveCamera(center);
+                map.animateCamera(zoom);
+            }
+        });
+    }
+
+    private void showAppRecommendedRoute(DeliveryRequest deliveryRequest) {
+
+        showRoute(deliveryRequest, true);
+
+    }
+
+    private void runTestCase() {
+
+        final TestManager testManager = new TestManager(this);
+        testManager.setRequestManager(requestManager);
+        testManager.start();
+    }
+
+    public void showGoogleRecommendedRoute(DeliveryRequest deliveryRequest) {
+
+        showRoute(deliveryRequest, false);
+    }
+
+    public void showRoute(DeliveryRequest deliveryRequest, final boolean addRecommendation) {
+
+        if (!Util.Operations.isOnline(this)) {
 
             Toast.makeText(this, "No internet connectivity", Toast.LENGTH_SHORT).show();
+            return;
         }
-    }
 
-    public void showGoogleRecommendedRoute() {
+        double startLat = deliveryRequest.getStartLat();
+        double startLon = deliveryRequest.getStartLon();
 
-        if (start == null || end == null) {
+        final LatLng start = new LatLng(startLat, startLon);
 
-            if (start == null) {
+        final double endLat = deliveryRequest.getDestinationLat();
+        final double endLon = deliveryRequest.getDestinationLon();
 
-                Toast.makeText(this, "Starting point is not available.", Toast.LENGTH_SHORT).show();
+        final LatLng end = new LatLng(endLat, endLon);
+
+        final ProgressDialog progressDialog = ProgressDialog.show(this, "Please wait.", "Fetching route information.", true);
+
+        RoutingListener routeListener = new RoutingListener() {
+
+            @Override
+            public void onRoutingFailure(RouteException e) {
+
+                // The Routing request failed
+                progressDialog.dismiss();
+
+                if (e != null) {
+
+                    Toast.makeText(DriverMapActivity.this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    Toast.makeText(DriverMapActivity.this, "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
+                }
             }
 
-            if (end == null) {
+            @Override
+            public void onRoutingStart() {
 
-                Toast.makeText(this, "Destination point is not available.", Toast.LENGTH_SHORT).show();
+                // The Routing Request starts
             }
 
-        } else {
+            @Override
+            public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
 
-            //LatLng via = new LatLng(12.92376915, 77.61471748);
+                progressDialog.dismiss();
 
-            progressDialog = ProgressDialog.show(this, "Please wait.", "Fetching showGoogleRecommendedRoute information.", true);
+                CameraUpdate center = CameraUpdateFactory.newLatLng(start);
+                CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
 
-            Routing routing = new Routing.Builder()
-                    .travelMode(AbstractRouting.TravelMode.DRIVING)
-                    .withListener(this)
-                    .alternativeRoutes(false)
-                    .waypoints(start, end)
-                    .build();
+                map.moveCamera(center);
 
-            routing.execute();
-        }
-    }
+                /*if (polyLines.size() > 0) {
 
-    @Override
-    public void onRoutingFailure(RouteException e) {
+                    for (Polyline poly : polyLines) {
+                        poly.remove();
+                    }
+                }*/
 
-        // The Routing request failed
-        progressDialog.dismiss();
+                polyLines = new ArrayList<>();
 
-        if (e != null) {
+                //add showGoogleRecommendedRoute(s) to the map.
+                for (int i = 0; i < route.size(); i++) {
 
-            Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    //In case of more than 5 alternative routes
+                    int color = Color.argb(255, 0, 0, 255/(i+1));
 
-        } else {
+                    if(addRecommendation) {
 
-            Toast.makeText(this, "Something went wrong, Try again", Toast.LENGTH_SHORT).show();
-        }
-    }
+                        color = Color.argb(255, 255/(i+1), 0, 0);
+                    }
 
-    @Override
-    public void onRoutingStart() {
+                    PolylineOptions polyOptions = new PolylineOptions();
+                    polyOptions.color(color);
+                    polyOptions.width(10 + i * 3);
+                    polyOptions.addAll(route.get(i).getPoints());
+                    Polyline polyline = map.addPolyline(polyOptions);
+                    polyLines.add(polyline);
 
-        // The Routing Request starts
-    }
+                    Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
+                }
 
-    @Override
-    public void onRoutingSuccess(List<Route> route, int shortestRouteIndex) {
 
-        progressDialog.dismiss();
+                if(route.size() > 0) {
 
-        CameraUpdate center = CameraUpdateFactory.newLatLng(start);
-        CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
+                    Route route1 = route.get(shortestRouteIndex);
+                    String distance = route1.getDistanceText();
+                    String time = route1.getDurationText();
 
-        map.moveCamera(center);
+                    if(addRecommendation) {
 
-        if (polyLines.size() > 0) {
+                        tvAppCalculated.setText("Distance : " + distance + ", Duration : " + time);
 
-            for (Polyline poly : polyLines) {
-                poly.remove();
+                    } else {
+
+                        tvGoogleSuggested.setText("Distance : " + distance + ", Duration : " + time);
+                    }
+                }
+
+
+                // Start marker
+                MarkerOptions options = new MarkerOptions();
+                options.position(start);
+                options.icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue));
+                map.addMarker(options);
+
+                // End marker
+                options = new MarkerOptions();
+                options.position(end);
+                options.icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green));
+                map.addMarker(options);
+
+            }
+
+            @Override
+            public void onRoutingCancelled() {
+                Log.i(LOG_TAG, "Routing was cancelled.");
+
+                // The Routing request failed
+                progressDialog.dismiss();
+            }
+        };
+
+        ArrayList<LatLng> recommended = null;
+
+        if(addRecommendation) {
+
+            recommended = deliveryRequest.getRecommendedPathPoints();
+
+            if(recommended == null || recommended.size() == 0) {
+
+                // The Routing request failed
+                progressDialog.dismiss();
+
+                return;
             }
         }
 
-        polyLines = new ArrayList<>();
+        Routing routing = new Routing.Builder()
+                .travelMode(AbstractRouting.TravelMode.DRIVING)
+                .withListener(routeListener)
+                .alternativeRoutes(false)
+                .waypoints(start, end, recommended)
+                .build();
 
-        //add showGoogleRecommendedRoute(s) to the map.
-        for (int i = 0; i < route.size(); i++) {
-
-            //In case of more than 5 alternative routes
-            int colorIndex = i % COLORS.length;
-
-            PolylineOptions polyOptions = new PolylineOptions();
-            polyOptions.color(COLORS[colorIndex]);
-            polyOptions.width(10 + i * 3);
-            polyOptions.addAll(route.get(i).getPoints());
-            Polyline polyline = map.addPolyline(polyOptions);
-            polyLines.add(polyline);
-
-            Toast.makeText(getApplicationContext(), "Route " + (i + 1) + ": distance - " + route.get(i).getDistanceValue() + ": duration - " + route.get(i).getDurationValue(), Toast.LENGTH_SHORT).show();
-        }
-
-        // Start marker
-        MarkerOptions options = new MarkerOptions();
-        options.position(start);
-        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.start_blue));
-        map.addMarker(options);
-
-        // End marker
-        options = new MarkerOptions();
-        options.position(end);
-        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.end_green));
-        map.addMarker(options);
-
+        routing.execute();
     }
 
-    @Override
-    public void onRoutingCancelled() {
-        Log.i(LOG_TAG, "Routing was cancelled.");
-    }
-
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-
-        Log.v(LOG_TAG, connectionResult.toString());
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
 }

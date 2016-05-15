@@ -139,6 +139,19 @@ public class Routing extends AbstractRouting {
             return this;
         }
 
+        public Builder waypoints (LatLng start, LatLng end, ArrayList<LatLng> recommended) {
+
+            waypoints.clear();
+            waypoints.add(start);
+
+            if(recommended != null) {
+                waypoints.addAll(recommended);
+            }
+
+            waypoints.add(end);
+            return this;
+        }
+
         public Builder waypoints (List<LatLng> waypoints) {
             this.waypoints = new ArrayList<>(waypoints);
             return this;

@@ -42,7 +42,10 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -354,7 +357,7 @@ public class TestActivity extends AppCompatActivity implements RoutingListener, 
                     .travelMode(AbstractRouting.TravelMode.DRIVING)
                     .withListener(this)
                     .alternativeRoutes(false)
-                    .waypoints(start, end)
+                    .waypoints(start, end, null)
                     .build();
             routing.execute();
         }
@@ -378,7 +381,7 @@ public class TestActivity extends AppCompatActivity implements RoutingListener, 
     }
 
     @Override
-    public void onRoutingSuccess(List<Route> route, int shortestRouteIndex) {
+    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
         progressDialog.dismiss();
         CameraUpdate center = CameraUpdateFactory.newLatLng(start);
         CameraUpdate zoom = CameraUpdateFactory.zoomTo(16);
@@ -442,4 +445,5 @@ public class TestActivity extends AppCompatActivity implements RoutingListener, 
     public void onConnectionSuspended(int i) {
 
     }
+
 }

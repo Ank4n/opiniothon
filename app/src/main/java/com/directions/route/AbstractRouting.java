@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class AbstractRouting extends AsyncTask<Void, Void, List<Route>> {
+public abstract class AbstractRouting extends AsyncTask<Void, Void, ArrayList<Route>> {
     protected List<RoutingListener> alisteners;
 
     protected static final String DIRECTIONS_API_URL = "https://maps.googleapis.com/maps/api/directions/json?";
@@ -94,7 +94,7 @@ public abstract class AbstractRouting extends AsyncTask<Void, Void, List<Route>>
         }
     }
 
-    protected void dispatchOnSuccess(List<Route> route, int shortestRouteIndex) {
+    protected void dispatchOnSuccess(ArrayList<Route> route, int shortestRouteIndex) {
         for (RoutingListener mListener : alisteners) {
             mListener.onRoutingSuccess(route, shortestRouteIndex);
         }
@@ -113,8 +113,8 @@ public abstract class AbstractRouting extends AsyncTask<Void, Void, List<Route>>
      * @return an array list containing the routes
      */
     @Override
-    protected List<Route> doInBackground(Void... voids) {
-        List<Route> result = new ArrayList<Route>();
+    protected ArrayList<Route> doInBackground(Void... voids) {
+        ArrayList<Route> result = new ArrayList<Route>();
         try {
             result = new GoogleParser(constructURL()).parse();
         }catch(RouteException e){
@@ -131,7 +131,7 @@ public abstract class AbstractRouting extends AsyncTask<Void, Void, List<Route>>
     }
 
     @Override
-    protected void onPostExecute(List<Route> result) {
+    protected void onPostExecute(ArrayList<Route> result) {
         if (!result.isEmpty()) {
             int shortestRouteIndex = 0;
             int minDistance = Integer.MAX_VALUE;
