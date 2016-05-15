@@ -65,14 +65,14 @@ public class TestManager {
 
         ArrayList<LatLng> recommendedPoints = new ArrayList<>();
 
-        LatLng footPrintPoint1 = new LatLng(12.92376915, 77.61471748);
+        /*LatLng footPrintPoint1 = new LatLng(12.92376915, 77.61471748);
         recommendedPoints.add(footPrintPoint1);
 
         LatLng footPrintPoint2 = new LatLng(12.91117854, 77.60652065);
         recommendedPoints.add(footPrintPoint2);
 
         LatLng footPrintPoint3 = new LatLng(12.90442285, 77.60422468);
-        recommendedPoints.add(footPrintPoint3);
+        recommendedPoints.add(footPrintPoint3);*/
 
         deliveryRequest.setStartPoint(latLngDriver);
         deliveryRequest.setEndPoint(latLngCustomer);
