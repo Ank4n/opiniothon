@@ -2,6 +2,7 @@ package opiniothon.capriccioso.roadrunner.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -34,6 +35,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -45,7 +47,8 @@ import opiniothon.capriccioso.roadrunner.R;
 
 public class DriverMapActivity extends AppCompatActivity {
 
-    public static  boolean launchCollectionMode = true;
+    //TODO For demonstration only
+    public static boolean launchCollectionMode = true;
 
     private static final String LOG_TAG = "DriverMapActivity";
 
@@ -59,6 +62,8 @@ public class DriverMapActivity extends AppCompatActivity {
     private List<Polyline> polyLines;
 
     private RequestManager requestManager;
+
+    private View next;
 
     private static final LatLngBounds BOUNDS_BANGALURU = new LatLngBounds(
             new LatLng(77.40692138671875, 13.124954649619102),
@@ -168,14 +173,21 @@ public class DriverMapActivity extends AppCompatActivity {
         tvGoogleSuggested = (TextView) findViewById(R.id.tvGoogleSuggested);
         tvAppCalculated = (TextView) findViewById(R.id.tvAppCalculated);
 
-        if(launchCollectionMode) {
+        if (launchCollectionMode) {
 
             findViewById(R.id.llBottom).setVisibility(View.GONE);
         }
 
         startLookingForRequest();
 
-        runTestCase();
+        next = findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                runTestCase();
+            }
+        });
     }
 
     private void startLookingForRequest() {
@@ -188,33 +200,74 @@ public class DriverMapActivity extends AppCompatActivity {
 
                 showGoogleRecommendedRoute(deliveryRequest);
 
-                new Handler().postDelayed(new Runnable() {
-
+                next.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void run() {
+                    public void onClick(View v) {
 
-                        if(!launchCollectionMode) {
-
-                            showAppRecommendedRoute(deliveryRequest);
-
-                        } else {
-
-
-                            footPrintCollectionSimulation();
-                        }
+                        next(deliveryRequest);
                     }
+                });
+            }
+        });
+    }
 
-                }, 1000);
+    private void next(final DeliveryRequest deliveryRequest) {
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+
+                if (!launchCollectionMode) {
+
+                    showAppRecommendedRoute(deliveryRequest);
+
+                } else {
+
+                    footPrintCollectionSimulation();
+                }
+            }
+
+        }, 0);
+
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                /*if (!launchCollectionMode) {
+
+                    TestManager.optimizeLast = true;
+
+                    next.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            TestManager.optimizeLast = false;
+                            launchCollectionMode = true;
+
+                            startActivity(new Intent(DriverMapActivity.this, DriverMapActivity.class));
+                            finish();
+                        }
+                    });
+                }*/
+
+                //launchCollectionMode = false;
+                launchCollectionMode = !launchCollectionMode;
+
+                startActivity(new Intent(DriverMapActivity.this, DriverMapActivity.class));
+                finish();
             }
         });
     }
 
     private void footPrintCollectionSimulation() {
 
-
         final ArrayList<LatLng> points = new ArrayList<LatLng>();
 
         final ArrayList<Polyline> polylinesTemp = new ArrayList<>();
+
+        final ArrayList<Marker> markers = new ArrayList<>();
+
 
         TestManager.getTestFootPrints(new TestManager.OnTestFootPrintListener() {
 
@@ -233,6 +286,10 @@ public class DriverMapActivity extends AppCompatActivity {
                     poly.remove();
                 }
 
+                for (Marker marker : markers) {
+                    marker.remove();
+                }
+
                 Polyline polyline = map.addPolyline(polyOptions);
                 polylinesTemp.add(polyline);
 
@@ -241,6 +298,12 @@ public class DriverMapActivity extends AppCompatActivity {
 
                 map.moveCamera(center);
                 map.animateCamera(zoom);
+
+                MarkerOptions options = new MarkerOptions();
+                options.position(latLng);
+
+                Marker marker = map.addMarker(options);
+                markers.add(marker);
             }
         });
     }
@@ -330,11 +393,11 @@ public class DriverMapActivity extends AppCompatActivity {
                 for (int i = 0; i < route.size(); i++) {
 
                     //In case of more than 5 alternative routes
-                    int color = Color.argb(255, 0, 0, 255/(i+1));
+                    int color = Color.argb(255, 0, 0, 255 / (i + 1));
 
-                    if(addRecommendation) {
+                    if (addRecommendation) {
 
-                        color = Color.argb(255, 255/(i+1), 0, 0);
+                        color = Color.argb(255, 255 / (i + 1), 0, 0);
                     }
 
                     PolylineOptions polyOptions = new PolylineOptions();
@@ -348,13 +411,13 @@ public class DriverMapActivity extends AppCompatActivity {
                 }
 
 
-                if(route.size() > 0) {
+                if (route.size() > 0) {
 
                     Route route1 = route.get(shortestRouteIndex);
                     String distance = route1.getDistanceText();
                     String time = route1.getDurationText();
 
-                    if(addRecommendation) {
+                    if (addRecommendation) {
 
                         tvAppCalculated.setText("Distance : " + distance + ", Duration : " + time);
 
@@ -390,11 +453,11 @@ public class DriverMapActivity extends AppCompatActivity {
 
         ArrayList<LatLng> recommended = null;
 
-        if(addRecommendation) {
+        if (addRecommendation) {
 
             recommended = deliveryRequest.getRecommendedPathPoints();
 
-            if(recommended == null || recommended.size() == 0) {
+            if (recommended == null || recommended.size() == 0) {
 
                 // The Routing request failed
                 progressDialog.dismiss();

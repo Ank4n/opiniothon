@@ -119,7 +119,7 @@ public class TestManager {
                 Log.d("STACK SIZE : ", "SIZE : " + i);
             }*/
 
-            new CountDownTimer(70000, 130) {
+            new CountDownTimer(70000, 100) {
 
                 @Override
                 public void onTick(long millisUntilFinished) {

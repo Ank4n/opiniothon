@@ -66,5 +66,16 @@
 
     </LinearLayout>
 
+
+    <ImageView
+        android:id="@+id/next"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/ic_send_grey600_48dp" />
+
 </RelativeLayout>
 
