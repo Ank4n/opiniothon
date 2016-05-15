@@ -89,14 +89,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         finish();
                     }
                 }else{
-                    Toast.makeText(LoginActivity.this,"Ok",Toast.LENGTH_LONG).show();
+                    Snackbar.make(passwordButton, R.string.invalid_user, Snackbar.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Throwable t) {
                 t.printStackTrace();
-                Toast.makeText(LoginActivity.this,"Fail",Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this,R.string.broken,Toast.LENGTH_LONG).show();
 
             }
         });
